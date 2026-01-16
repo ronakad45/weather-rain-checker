@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-cloud-rain"></i> Will It Rain Tomorrow?</h1>
+            <p class="subtitle">Check if you need an umbrella for tomorrow</p>
+        </header>
+
+        <main>
+            <% if (error) { %>
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i> <%= error %>
+                </div>
+            <% } %>
+
+            <div class="card">
+                <form action="/check-weather" method="POST">
+                    <div class="form-group">
+                        <label for="location">
+                            <i class="fas fa-map-marker-alt"></i> Enter City Name
+                        </label>
+                        <input 
+                            type="text" 
+                            id="location" 
+                            name="location" 
+                            placeholder="e.g., New York, London, Tokyo" 
+                            required
+                            autofocus
+                        >
+                        <small>You can also enter "City, Country" for more accuracy</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="units">
+                            <i class="fas fa-thermometer-half"></i> Temperature Units
+                        </label>
+                        <select id="units" name="units">
+                            <option value="metric">Celsius & mm</option>
+                            <option value="imperial">Fahrenheit & inches</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-cloud-sun-rain"></i> Check Tomorrow's Weather
+                    </button>
+                </form>
+
+                <div class="info-box">
+                    <h3><i class="fas fa-info-circle"></i> How it works:</h3>
+                    <ul>
+                        <li>Enter any city name in the world</li>
+                        <li>Get detailed forecast for tomorrow</li>
+                        <li>See if rain is expected and when</li>
+                        <li>View current weather conditions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-umbrella"></i>
+                    <h3>Rain Prediction</h3>
+                    <p>Detailed hourly rain forecast for tomorrow</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Real-time Data</h3>
+                    <p>Current weather conditions for context</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-globe-americas"></i>
+                    <h3>Global Coverage</h3>
+                    <p>Check weather for any city worldwide</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by OpenWeatherMap API</p>
+            <p class="disclaimer">Weather data may have slight variations. Always check closer to the time.</p>
+        </footer>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

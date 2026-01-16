@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-cloud-rain"></i> Rain Check Results</h1>
+            <a href="/" class="btn-secondary">
+                <i class="fas fa-search"></i> Check Another City
+            </a>
+        </header>
+
+        <main>
+            <% if (error) { %>
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i> <%= error %>
+                </div>
+            <% } else if (result) { %>
+                <div class="location-header">
+                    <h2><i class="fas fa-map-marker-alt"></i> <%= result.location %></h2>
+                    <p class="date"><i class="far fa-calendar-alt"></i> <%= result.tomorrowDate %></p>
+                </div>
+
+                <!-- Current Weather -->
+                <div class="current-weather card">
+                    <h3><i class="fas fa-sun"></i> Current Weather</h3>
+                    <div class="current-weather-content">
+                        <div class="temp-display">
+                            <img src="https://openweathermap.org/img/wn/<%= result.currentWeather.icon %>@2x.png" 
+                                 alt="<%= result.currentWeather.description %>"
+                                 class="weather-icon">
+                            <div class="temp-info">
+                                <span class="temperature"><%= result.currentWeather.temp %> <%= result.temperatureUnit %></span>
+                                <span class="description"><%= result.currentWeather.description %></span>
+                            </div>
+                        </div>
+                        <div class="weather-details">
+                            <div class="detail">
+                                <i class="fas fa-tint"></i>
+                                <span>Humidity: <%= result.currentWeather.humidity %>%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rain Prediction -->
+                <div class="rain-prediction card">
+                    <div class="prediction-header <%= result.willRain ? 'rain' : 'no-rain' %>">
+                        <div class="prediction-icon">
+                            <% if (result.willRain) { %>
+                                <i class="fas fa-cloud-showers-heavy"></i>
+                            <% } else { %>
+                                <i class="fas fa-sun"></i>
+                            <% } %>
+                        </div>
+                        <div class="prediction-text">
+                            <h3>
+                                <% if (result.willRain) { %>
+                                    Yes, it will rain tomorrow!
+                                <% } else { %>
+                                    No rain expected tomorrow
+                                <% } %>
+                            </h3>
+                            <p class="chance">
+                                Chance of rain: <strong><%= result.chanceOfRain %>%</strong>
+                                <% if (result.willRain && result.maxRainAmount > 0) { %>
+                                    • Max rainfall: <strong><%= result.maxRainAmount.toFixed(1) %> <%= result.units %></strong>
+                                <% } %>
+                            </p>
+                        </div>
+                    </div>
+
+                    <% if (result.willRain && result.rainDetails.length > 0) { %>
+                        <div class="rain-details">
+                            <h4><i class="fas fa-clock"></i> Expected Rain Times:</h4>
+                            <div class="rain-timeline">
+                                <% result.rainDetails.forEach(detail => { %>
+                                    <div class="rain-time">
+                                        <span class="time"><%= detail.time %></span>
+                                        <div class="rain-amount">
+                                            <i class="fas fa-cloud-rain"></i>
+                                            <span><%= detail.rainAmount.toFixed(1) %> <%= result.units %></span>
+                                        </div>
+                                        <div class="weather-condition">
+                                            <img src="https://openweathermap.org/img/wn/<%= detail.icon %>.png" 
+                                                 alt="<%= detail.description %>">
+                                            <span><%= detail.description %></span>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="recommendations card">
+                    <h3><i class="fas fa-lightbulb"></i> Recommendations</h3>
+                    <div class="recommendation-content">
+                        <% if (result.willRain) { %>
+                            <div class="recommendation rain">
+                                <i class="fas fa-umbrella"></i>
+                                <div>
+                                    <h4>Bring an Umbrella</h4>
+                                    <p>Rain is expected tomorrow. Don't forget your umbrella or raincoat.</p>
+                                </div>
+                            </div>
+                            <% if (result.maxRainAmount > 10) { %>
+                                <div class="recommendation heavy-rain">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <div>
+                                        <h4>Heavy Rain Expected</h4>
+                                        <p>Consider planning indoor activities or checking for flood warnings.</p>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% } else { %>
+                            <div class="recommendation no-rain">
+                                <i class="fas fa-sun"></i>
+                                <div>
+                                    <h4>Enjoy the Weather</h4>
+                                    <p>No rain expected. Perfect day for outdoor activities!</p>
+                                </div>
+                            </div>
+                        <% } %>
+                        <div class="recommendation general">
+                            <i class="fas fa-sync-alt"></i>
+                            <div>
+                                <h4>Check Again Later</h4>
+                                <p>Weather forecasts can change. Check again closer to tomorrow for updates.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Forecast Note -->
+                <div class="forecast-note">
+                    <p><i class="fas fa-info-circle"></i> Forecast based on 3-hour intervals. Rain amounts are for 3-hour periods.</p>
+                </div>
+
+            <% } %>
+        </main>
+
+        <footer>
+            <p>Powered by OpenWeatherMap API • Data refreshed every 3 hours</p>
+            <p class="disclaimer">This is a forecast and actual conditions may vary.</p>
+        </footer>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
