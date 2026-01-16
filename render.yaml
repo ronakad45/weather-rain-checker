@@ -1,0 +1,13 @@
+# render.yaml
+services:
+  - type: web
+    name: weather-rain-checker
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: OPENWEATHER_API_KEY
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+    plan: free
